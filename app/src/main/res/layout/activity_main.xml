@@ -7,37 +7,79 @@
     tools:context=".MainActivity">
 
     <TextView
-        android:id="@+id/status"
+        android:id="@+id/textStatus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Status"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:textAllCaps="true"
+        android:textColor="@color/dark_ocean"
+        android:textSize="22sp"
+        app:layout_constraintBottom_toTopOf="@+id/guidelineTop"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ScrollView
+        android:id="@+id/scroll"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/guidelineBottom"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guidelineTop">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textData"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="32dp"
+                android:textSize="16sp" />
+        </LinearLayout>
+    </ScrollView>
+
     <Button
-        android:id="@+id/listen"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="171dp"
-        android:layout_marginTop="232dp"
-        android:layout_marginEnd="152dp"
-        android:layout_marginBottom="75dp"
-        android:text="Listen"
+        android:id="@+id/buttonStart"
+        android:layout_width="128sp"
+        android:layout_height="36sp"
+        android:background="@drawable/style_button_blue"
+        android:shadowColor="@color/shadow"
+        android:shadowRadius="1"
+        android:text="Turn on"
+        android:textColor="@color/white"
+        android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/status" />
+        app:layout_constraintTop_toTopOf="@+id/guidelineBottom" />
 
-    <Button
-        android:id="@+id/send"
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineTop"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="152dp"
-        android:layout_marginBottom="45dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.1" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineBottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.9" />
+
+    <Button
+        android:id="@+id/buttonSend"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="Send"
-        app:layout_constraintBottom_toTopOf="@+id/listen"
-        app:layout_constraintEnd_toEndOf="parent" />
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

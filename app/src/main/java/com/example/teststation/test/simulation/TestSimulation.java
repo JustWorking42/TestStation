@@ -9,7 +9,7 @@ import com.example.teststation.test.MomentTest;
 import java.util.ArrayList;
 
 public class TestSimulation {
-    private final int PERIOD = 100;
+    private final int PERIOD = 30;
     private TestSimulationCallback callback;
     private ArrayList<MomentTest> testSimulationResult = new ArrayList<>();
     private ArrayList<java.lang.String> result = new ArrayList<>();
