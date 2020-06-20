@@ -17,6 +17,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,20 +48,26 @@ public class MainActivity extends AppCompatActivity implements TestSimulationCal
     private BluetoothSocket socket;
     private TestSimulation simulation;
 
-
-    Button send;
-    Button listen;
-    TextView status;
     BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+
+    private TextView textStatus;
+    private TextView textData;
+    private Button buttonStart;
+    private Button buttonSend;
+    private ScrollView scrollView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        listen = findViewById(R.id.listen);
-        status = findViewById(R.id.status);
-        send = findViewById(R.id.send);
+        textStatus = findViewById(R.id.textStatus);
+        textData = findViewById(R.id.textData);
+        buttonStart = findViewById(R.id.buttonStart);
+        buttonSend = findViewById(R.id.buttonSend);
         setListen();
+        scrollView = findViewById(R.id.scroll);
+
         checkBluetoothEnable();
 
         simulation = new TestSimulation();
@@ -90,9 +97,6 @@ public class MainActivity extends AppCompatActivity implements TestSimulationCal
         }
     }
 
-
-
-
      Handler handler = new Handler(new Handler.Callback() {
         @SuppressLint("SetTextI18n")
         @Override
@@ -100,21 +104,20 @@ public class MainActivity extends AppCompatActivity implements TestSimulationCal
             switch (msg.what)
             {
                 case STATE_LISTENING:
-                    status.setText("Listening");
+                    textStatus.setText("Listening");
                     break;
                 case STATE_CONNECTING:
-                    status.setText("Connecting");
+                    textStatus.setText("Connecting");
                     break;
                 case STATE_CONNECTED:
-                    status.setText("Connected");
+                    textStatus.setText("Connected");
                     break;
                 case STATE_CONNECTION_FAILED:
-                    status.setText("Connection Failed");
+                    textStatus.setText("Connection Failed");
                     break;
                 case STATE_MESSAGE_RECEIVED:
                     byte[] readBuffer = (byte[]) msg.obj;
                     String tempMsg = new String(readBuffer, 0, msg.arg1);
-//                    msgBox.setText(tempMsg);
                     receiveData(tempMsg);
                     break;
             }
@@ -137,12 +140,7 @@ public class MainActivity extends AppCompatActivity implements TestSimulationCal
         String[] inputParams = rData.split("\n");
         String currentTestName = inputParams[0];
         Toast.makeText(MainActivity.this, currentTestName, Toast.LENGTH_SHORT).show();
-        if (inputParams[0].equals("stop")) {
-            if (simulation != null) {
-                simulation.stopSimulation();
-            }
-        }
-        else if (currentTestName.equals(NAME_CYCLIC)) {
+        if (currentTestName.equals(NAME_CYCLIC)) {
             simulation.startSimulation(this, this, 0);
         }
         else if (currentTestName.equals(NAME_LINEAR_SWEEP)) {
@@ -163,23 +161,22 @@ public class MainActivity extends AppCompatActivity implements TestSimulationCal
     }
 
     private void setListen(){
-        listen.setOnClickListener(new View.OnClickListener() {
+        buttonStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 HostThread hostThread = new HostThread();
                 hostThread.start();
-                status.setText("Click");
+                textStatus.setText("Device is on");
             }
         });
 
-        send.setOnClickListener(new View.OnClickListener() {
+        buttonSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 sendData();
             }
         });
     }
-
 
     public void sendData(){
         String data = "Some DATA";
@@ -188,7 +185,8 @@ public class MainActivity extends AppCompatActivity implements TestSimulationCal
 
     @Override
     public void getTestData(String testData) {
-        System.out.println(testData);
+        textData.setText(textData.getText().toString() + testData);
+        scrollView.fullScroll(ScrollView.FOCUS_DOWN);
         sendReceive.write(testData.getBytes());
     }
 
@@ -238,7 +236,7 @@ public class MainActivity extends AppCompatActivity implements TestSimulationCal
                 Message message = Message.obtain();
                 message.what = STATE_CONNECTED;
                 handler.sendMessage(message);
-// управляем соединением (в отдельном потоке)
+// управлчем соединением (в отдельном потоке)
                      sendReceive = new SendReceive(socket);
 
 
