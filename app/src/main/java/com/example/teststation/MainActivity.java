@@ -140,7 +140,12 @@ public class MainActivity extends AppCompatActivity implements TestSimulationCal
         String[] inputParams = rData.split("\n");
         String currentTestName = inputParams[0];
         Toast.makeText(MainActivity.this, currentTestName, Toast.LENGTH_SHORT).show();
-        if (currentTestName.equals(NAME_CYCLIC)) {
+        if (inputParams[0].equals("stop")) {
+            if (simulation != null) {
+                simulation.stopSimulation();
+            }
+        }
+        else if (currentTestName.equals(NAME_CYCLIC)) {
             simulation.startSimulation(this, this, 0);
         }
         else if (currentTestName.equals(NAME_LINEAR_SWEEP)) {
