@@ -11,7 +11,6 @@ import java.util.ArrayList;
 public class TestSimulation {
     private final int PERIOD = 100;
     private TestSimulationCallback callback;
-    private ArrayList<MomentTest> testSimulationResult = new ArrayList<>();
     private ArrayList<java.lang.String> result = new ArrayList<>();
     private int indexCurrentTest = 0;
     private Handler handler = new Handler();
@@ -25,7 +24,7 @@ public class TestSimulation {
     public void stopSimulation() {
         callback = null;
         indexCurrentTest = 0;
-        testSimulationResult.clear();
+        result.clear();
         handler.removeCallbacks(timeUpdaterRunnable);
     }
 

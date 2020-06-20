@@ -15,13 +15,11 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.teststation.test.MomentTest;
 import com.example.teststation.test.simulation.TestSimulation;
 import com.example.teststation.test.simulation.TestSimulationCallback;
 
@@ -45,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements TestSimulationCal
     static final int REQUEST_ENABLE_BLUETOOTH = 0;
     private static final int REQUEST_CODE_PERMISSION = 0;
 
-    SendReceive sendReceive;//Красивый Герман у тебя соккет равен null переделывай все нахуй
+    SendReceive sendReceive;
     private BluetoothSocket socket;
     private TestSimulation simulation;
 
@@ -139,7 +137,12 @@ public class MainActivity extends AppCompatActivity implements TestSimulationCal
         String[] inputParams = rData.split("\n");
         String currentTestName = inputParams[0];
         Toast.makeText(MainActivity.this, currentTestName, Toast.LENGTH_SHORT).show();
-        if (currentTestName.equals(NAME_CYCLIC)) {
+        if (inputParams[0].equals("stop")) {
+            if (simulation != null) {
+                simulation.stopSimulation();
+            }
+        }
+        else if (currentTestName.equals(NAME_CYCLIC)) {
             simulation.startSimulation(this, this, 0);
         }
         else if (currentTestName.equals(NAME_LINEAR_SWEEP)) {
@@ -235,7 +238,7 @@ public class MainActivity extends AppCompatActivity implements TestSimulationCal
                 Message message = Message.obtain();
                 message.what = STATE_CONNECTED;
                 handler.sendMessage(message);
-// управлчем соединением (в отдельном потоке)
+// управляем соединением (в отдельном потоке)
                      sendReceive = new SendReceive(socket);
 
 
